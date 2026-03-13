@@ -3,6 +3,8 @@ package com.example.kmpdemo.book.presentation.booklist
 import app.cash.turbine.test
 import com.example.kmpdemo.book.domain.Book
 import com.example.kmpdemo.book.domain.BookRepository
+import com.example.kmpdemo.book.domain.use_case.GetFavoriteBooksUseCase
+import com.example.kmpdemo.book.domain.use_case.SearchBooksUseCase
 import com.example.kmpdemo.core.domain.DataError
 import com.example.kmpdemo.core.domain.EmptyResult
 import com.example.kmpdemo.core.domain.Result
@@ -23,6 +25,8 @@ class BookListViewModelTest {
 
     private lateinit var viewModel: BookListViewModel
     private lateinit var repository: FakeBookRepository
+    private lateinit var searchBooksUseCase: SearchBooksUseCase
+    private lateinit var getFavoriteBooksUseCase: GetFavoriteBooksUseCase
     private val testDispatcher = StandardTestDispatcher()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -30,7 +34,9 @@ class BookListViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         repository = FakeBookRepository()
-        viewModel = BookListViewModel(repository)
+        searchBooksUseCase = SearchBooksUseCase(repository)
+        getFavoriteBooksUseCase = GetFavoriteBooksUseCase(repository)
+        viewModel = BookListViewModel(searchBooksUseCase, getFavoriteBooksUseCase)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
