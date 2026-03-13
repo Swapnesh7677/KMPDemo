@@ -20,6 +20,7 @@ import com.example.kmpdemo.book.presentation.book_detail.BookDetailScreenRoot
 import com.example.kmpdemo.book.presentation.book_detail.BookDetailViewModel
 import com.example.kmpdemo.book.presentation.booklist.BookListScreenRoot
 import com.example.kmpdemo.book.presentation.booklist.BookListViewModel
+import com.example.kmpdemo.splash.SplashScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -30,8 +31,18 @@ fun App() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Route.BookGraph
+            startDestination = Route.Splash
         ) {
+            composable<Route.Splash> {
+                SplashScreen(
+                    onTimeout = {
+                        navController.navigate(Route.BookGraph) {
+                            popUpTo(Route.Splash) { inclusive = true }
+                        }
+                    }
+                )
+            }
+            
             navigation<Route.BookGraph>(
                 startDestination = Route.BookList
             ) {

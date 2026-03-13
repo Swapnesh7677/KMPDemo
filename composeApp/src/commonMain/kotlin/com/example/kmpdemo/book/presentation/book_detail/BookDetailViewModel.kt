@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmpdemo.app.Route
-import com.example.kmpdemo.book.domain.BookRepository
-import com.example.kmpdemo.book.presentation.book_detail.BookDetailAction
-import com.example.kmpdemo.book.presentation.book_detail.BookDetailState
+import com.example.kmpdemo.book.domain.use_case.GetBookDescriptionUseCase
+import com.example.kmpdemo.book.domain.use_case.ObserveFavoriteStatusUseCase
+import com.example.kmpdemo.book.domain.use_case.ToggleFavoriteUseCase
 import com.example.kmpdemo.core.domain.onSuccess
 import androidx.navigation.toRoute
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,9 @@ import kotlinx.coroutines.launch
 
 
 class BookDetailViewModel(
-    private val bookRepository: BookRepository,
+    private val getBookDescriptionUseCase: GetBookDescriptionUseCase,
+    private val observeFavoriteStatusUseCase: ObserveFavoriteStatusUseCase,
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -48,12 +50,8 @@ class BookDetailViewModel(
             }
             is BookDetailAction.OnFavoriteClick -> {
                 viewModelScope.launch {
-                    if(state.value.isFavorite) {
-                        bookRepository.deleteFromFavorites(bookId)
-                    } else {
-                        state.value.book?.let { book ->
-                            bookRepository.markAsFavorite(book)
-                        }
+                    state.value.book?.let { book ->
+                        toggleFavoriteUseCase(book, state.value.isFavorite)
                     }
                 }
             }
@@ -62,8 +60,7 @@ class BookDetailViewModel(
     }
 
     private fun observeFavoriteStatus() {
-        bookRepository
-            .isBookFavorite(bookId)
+        observeFavoriteStatusUseCase(bookId)
             .onEach { isFavorite ->
                 _state.update { it.copy(
                     isFavorite = isFavorite
@@ -74,8 +71,7 @@ class BookDetailViewModel(
 
     private fun fetchBookDescription() {
         viewModelScope.launch {
-            bookRepository
-                .getBookDescription(bookId)
+            getBookDescriptionUseCase(bookId)
                 .onSuccess { description ->
                     _state.update { it.copy(
                         book = it.book?.copy(

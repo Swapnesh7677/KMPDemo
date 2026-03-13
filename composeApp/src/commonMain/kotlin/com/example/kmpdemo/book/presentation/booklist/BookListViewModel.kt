@@ -3,7 +3,8 @@ package com.example.kmpdemo.book.presentation.booklist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmpdemo.book.domain.Book
-import com.example.kmpdemo.book.domain.BookRepository
+import com.example.kmpdemo.book.domain.use_case.GetFavoriteBooksUseCase
+import com.example.kmpdemo.book.domain.use_case.SearchBooksUseCase
 import com.example.kmpdemo.core.domain.onError
 import com.example.kmpdemo.core.domain.onSuccess
 import com.example.kmpdemo.core.presentation.toUiText
@@ -21,7 +22,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BookListViewModel(
-    private val bookRepository: BookRepository
+    private val searchBooksUseCase: SearchBooksUseCase,
+    private val getFavoriteBooksUseCase: GetFavoriteBooksUseCase
 ) : ViewModel() {
 
     private var cachedBooks = emptyList<Book>()
@@ -64,8 +66,7 @@ class BookListViewModel(
 
     private fun observeFavoriteBooks() {
         observeFavoriteJob?.cancel()
-        observeFavoriteJob = bookRepository
-            .getFavoriteBooks()
+        observeFavoriteJob = getFavoriteBooksUseCase()
             .onEach { favoriteBooks ->
                 _state.update { it.copy(
                     favoriteBooks = favoriteBooks
@@ -105,8 +106,7 @@ class BookListViewModel(
                 isLoading = true
             )
         }
-        bookRepository
-            .searchBooks(query)
+        searchBooksUseCase(query)
             .onSuccess { searchResults ->
                 _state.update {
                     it.copy(

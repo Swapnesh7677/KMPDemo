@@ -7,6 +7,11 @@ import com.example.kmpdemo.book.data.network.KtorRemoteBookDataSource
 import com.example.kmpdemo.book.data.network.RemoteBookDataSource
 import com.example.kmpdemo.book.data.repository.DefaultBookRepository
 import com.example.kmpdemo.book.domain.BookRepository
+import com.example.kmpdemo.book.domain.use_case.GetBookDescriptionUseCase
+import com.example.kmpdemo.book.domain.use_case.GetFavoriteBooksUseCase
+import com.example.kmpdemo.book.domain.use_case.ObserveFavoriteStatusUseCase
+import com.example.kmpdemo.book.domain.use_case.SearchBooksUseCase
+import com.example.kmpdemo.book.domain.use_case.ToggleFavoriteUseCase
 import com.example.kmpdemo.book.presentation.SelectedBookViewModel
 import com.example.kmpdemo.book.presentation.book_detail.BookDetailViewModel
 import com.example.kmpdemo.book.presentation.booklist.BookListViewModel
@@ -24,6 +29,12 @@ val sharedModule = module {
     single { HttpClientFactory.create(get()) }
     singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
     singleOf(::DefaultBookRepository).bind<BookRepository>()
+
+    singleOf(::SearchBooksUseCase)
+    singleOf(::GetFavoriteBooksUseCase)
+    singleOf(::GetBookDescriptionUseCase)
+    singleOf(::ObserveFavoriteStatusUseCase)
+    singleOf(::ToggleFavoriteUseCase)
 
     single {
         get<DatabaseFactory>().create()
