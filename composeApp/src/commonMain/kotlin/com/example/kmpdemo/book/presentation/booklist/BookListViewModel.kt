@@ -61,6 +61,14 @@ class BookListViewModel(
                     it.copy(selectedTabIndex = action.index)
                 }
             }
+            
+            BookListAction.OnToggleBottomSheet -> {
+                _state.update { it.copy(
+                    isBottomSheetVisible = !it.isBottomSheetVisible
+                ) }
+            }
+
+            else -> {}
         }
     }
 

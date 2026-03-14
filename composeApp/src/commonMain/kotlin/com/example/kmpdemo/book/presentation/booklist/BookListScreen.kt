@@ -1,33 +1,48 @@
 package com.example.kmpdemo.book.presentation.booklist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CloudUpload
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -48,6 +63,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun BookListScreenRoot(
     viewModel: BookListViewModel = koinViewModel(),
     onBookClick: (Book) -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -56,6 +72,7 @@ fun BookListScreenRoot(
         onAction = { action ->
             when (action) {
                 is BookListAction.OnBookClick -> onBookClick(action.book)
+                BookListAction.OnSettingsClick -> onSettingsClick()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -63,6 +80,7 @@ fun BookListScreenRoot(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookListScreen(
     state: BookListState,
@@ -86,6 +104,39 @@ fun BookListScreen(
         onAction(BookListAction.OnTabSelected(pagerState.currentPage))
     }
 
+    if (state.isBottomSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = { onAction(BookListAction.OnToggleBottomSheet) },
+            sheetState = rememberModalBottomSheetState()
+            //containerColor = DesertWhite
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+            ) {
+                BottomSheetItem(
+                    icon = Icons.Default.Map,
+                    text = "Map",
+                    onClick = { onAction(BookListAction.OnToggleBottomSheet) }
+                )
+                BottomSheetItem(
+                    icon = Icons.Default.CloudUpload,
+                    text = "Upload",
+                    onClick = { onAction(BookListAction.OnToggleBottomSheet) }
+                )
+                BottomSheetItem(
+                    icon = Icons.Default.Settings,
+                    text = "Settings",
+                    onClick = { 
+                        onAction(BookListAction.OnToggleBottomSheet)
+                        onAction(BookListAction.OnSettingsClick)
+                    }
+                )
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,20 +144,34 @@ fun BookListScreen(
             .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BookSearchBar(
-            searchQuery = state.searchQuery,
-            onSearchQueryChange = {
-                onAction(BookListAction.OnSearchQueryChange(it))
-            },
-            onImeSearch = {
-                keyboardController?.hide()
-            },
-            modifier =
-                Modifier
-                    .widthIn(max = 400.dp)
-                    .fillMaxWidth()
-                    .padding(16.dp)
-        )
+        Row(
+            modifier = Modifier
+                .widthIn(max = 400.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BookSearchBar(
+                searchQuery = state.searchQuery,
+                onSearchQueryChange = {
+                    onAction(BookListAction.OnSearchQueryChange(it))
+                },
+                onImeSearch = {
+                    keyboardController?.hide()
+                },
+                modifier = Modifier.weight(1f)
+            )
+            IconButton(
+                onClick = { onAction(BookListAction.OnToggleBottomSheet) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu"
+                    //tint = DesertWhite
+                )
+            }
+        }
+
         Surface(
             modifier = Modifier
                 .weight(1f)
@@ -239,5 +304,33 @@ fun BookListScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BottomSheetItem(
+    icon: ImageVector,
+    text: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = text,
+            tint = DarkBlue,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = DarkBlue
+        )
     }
 }

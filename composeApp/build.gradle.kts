@@ -29,6 +29,20 @@ kotlin {
     
     jvm()
 
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        browser {
+//            commonWebpackConfig {
+//                devServer = (devServer ?: org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.DevServer()).apply {
+//                    static = (static ?: mutableListOf()).apply {
+//                        add(project.projectDir.resolve("src/wasmJsMain/resources").path)
+//                    }
+//                }
+//            }
+//        }
+//        binaries.executable()
+//    }
+
     room {
         schemaDirectory("$projectDir/schemas")
     }
@@ -42,9 +56,11 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
             implementation(libs.ktor.client.okhttp)
+
         }
         commonMain.dependencies {
             implementation(project(":splash"))
+            implementation(project(":settings"))
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -75,7 +91,6 @@ kotlin {
 
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
-            implementation(libs.ktor.client.okhttp)
 
         }
 
@@ -87,6 +102,10 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
 
         }
+
+//        wasmJsMain.dependencies {
+////            implementation(libs.ktor.client.core)
+//        }
 
 
         commonTest.dependencies {

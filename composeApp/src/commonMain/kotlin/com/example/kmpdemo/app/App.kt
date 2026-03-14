@@ -2,6 +2,7 @@ package com.example.kmpdemo.app
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -20,14 +21,20 @@ import com.example.kmpdemo.book.presentation.book_detail.BookDetailScreenRoot
 import com.example.kmpdemo.book.presentation.book_detail.BookDetailViewModel
 import com.example.kmpdemo.book.presentation.booklist.BookListScreenRoot
 import com.example.kmpdemo.book.presentation.booklist.BookListViewModel
+import com.example.kmpdemo.settings.SettingsScreen
 import com.example.kmpdemo.splash.SplashScreen
+import com.example.kmpdemo.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Preview
 fun App() {
+    var isDarkMode by remember { mutableStateOf<Boolean?>(null) }
+    val darkTheme = isDarkMode ?: isSystemInDarkTheme()
 
-    MaterialTheme {
+    AppTheme(
+        darkTheme = darkTheme
+    ) {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
@@ -65,6 +72,9 @@ fun App() {
                             navController.navigate(
                                 Route.BookDetail(book.id)
                             )
+                        },
+                        onSettingsClick = {
+                            navController.navigate(Route.Settings)
                         }
                     )
                 }
@@ -96,6 +106,14 @@ fun App() {
                         onBackClick = {
                             navController.navigateUp()
                         }
+                    )
+                }
+                
+                composable<Route.Settings> {
+                    SettingsScreen(
+                        isDarkMode = darkTheme,
+                        onThemeChange = { isDarkMode = it },
+                        onBackClick = { navController.navigateUp() }
                     )
                 }
             }
