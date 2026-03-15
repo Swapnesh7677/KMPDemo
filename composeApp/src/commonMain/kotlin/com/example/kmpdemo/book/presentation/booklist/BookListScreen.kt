@@ -171,12 +171,11 @@ fun BookListScreen(
                 )
             }
         }
-
+//   color = DesertWhite,
         Surface(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            color = DesertWhite,
             shape = RoundedCornerShape(
                 topStart = 32.dp,
                 topEnd = 32.dp

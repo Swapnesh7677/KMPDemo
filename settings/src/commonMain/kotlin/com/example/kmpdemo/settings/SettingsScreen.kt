@@ -21,8 +21,6 @@ fun SettingsScreen(
                 title = { Text("Settings") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        // Use a simple text if icon not available, 
-                        // but since we have material icons in commonMain it should be fine
                         Text("<") 
                     }
                 }
