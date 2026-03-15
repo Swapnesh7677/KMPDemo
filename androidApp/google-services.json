@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875656654246",
+    "project_id": "swapkmpdemo",
+    "storage_bucket": "swapkmpdemo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875656654246:android:6c157641ad13c372937367",
+        "android_client_info": {
+          "package_name": "com.example.kmpdemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcSd5Ub0oCE5yOsVlrI3mY0arGvHJ2LKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
