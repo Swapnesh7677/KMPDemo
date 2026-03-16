@@ -57,6 +57,8 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             implementation(libs.ktor.client.okhttp)
 
+            implementation(libs.activity.compose)
+
         }
         commonMain.dependencies {
             implementation(project(":splash"))

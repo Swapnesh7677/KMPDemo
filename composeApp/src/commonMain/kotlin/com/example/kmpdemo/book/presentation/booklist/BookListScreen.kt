@@ -63,7 +63,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun BookListScreenRoot(
     viewModel: BookListViewModel = koinViewModel(),
     onBookClick: (Book) -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    onUploadClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -73,6 +74,7 @@ fun BookListScreenRoot(
             when (action) {
                 is BookListAction.OnBookClick -> onBookClick(action.book)
                 BookListAction.OnSettingsClick -> onSettingsClick()
+                BookListAction.OnUploadClick -> onUploadClick()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -123,7 +125,10 @@ fun BookListScreen(
                 BottomSheetItem(
                     icon = Icons.Default.CloudUpload,
                     text = "Upload",
-                    onClick = { onAction(BookListAction.OnToggleBottomSheet) }
+                    onClick = { 
+                        onAction(BookListAction.OnToggleBottomSheet)
+                        onAction(BookListAction.OnUploadClick)
+                    }
                 )
                 BottomSheetItem(
                     icon = Icons.Default.Settings,

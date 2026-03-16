@@ -3,7 +3,6 @@ package com.example.kmpdemo.app
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +20,8 @@ import com.example.kmpdemo.book.presentation.book_detail.BookDetailScreenRoot
 import com.example.kmpdemo.book.presentation.book_detail.BookDetailViewModel
 import com.example.kmpdemo.book.presentation.booklist.BookListScreenRoot
 import com.example.kmpdemo.book.presentation.booklist.BookListViewModel
+import com.example.kmpdemo.book.presentation.upload.ImageListScreen
+import com.example.kmpdemo.book.presentation.upload.UploadScreen
 import com.example.kmpdemo.settings.SettingsScreen
 import com.example.kmpdemo.splash.SplashScreen
 import com.example.kmpdemo.theme.AppTheme
@@ -75,6 +76,9 @@ fun App() {
                         },
                         onSettingsClick = {
                             navController.navigate(Route.Settings)
+                        },
+                        onUploadClick = {
+                            navController.navigate(Route.Upload)
                         }
                     )
                 }
@@ -113,6 +117,19 @@ fun App() {
                     SettingsScreen(
                         isDarkMode = darkTheme,
                         onThemeChange = { isDarkMode = it },
+                        onBackClick = { navController.navigateUp() }
+                    )
+                }
+
+                composable<Route.Upload> {
+                    UploadScreen(
+                        onBackClick = { navController.navigateUp() },
+                        onSeeListClick = { navController.navigate(Route.ImageList) }
+                    )
+                }
+
+                composable<Route.ImageList> {
+                    ImageListScreen(
                         onBackClick = { navController.navigateUp() }
                     )
                 }
