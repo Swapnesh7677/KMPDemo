@@ -12,6 +12,7 @@ class GetBookDescriptionUseCaseTest {
     private lateinit var getBookDescriptionUseCase: GetBookDescriptionUseCase
     private lateinit var repository: FakeBookRepository
 
+
     @BeforeTest
     fun setUp() {
         repository = FakeBookRepository()

@@ -13,15 +13,15 @@ composeMultiplatform = "1.10.0"
 junit = "4.13.2"
 kotlin = "2.1.0"
 material3 = "1.10.0-alpha05"
-androidx-material = "1.12.0"
+
 composematerialIcons ="1.7.3"
 navigationCompose = "2.8.0-alpha10"
 koin = "4.1.1"
 ktor = "3.0.3"
-lifecycleViewModel = "2.8.6"
-android-lifecycle = "2.8.6"
+
 coil3 = "3.0.0-rc02"
 kotlinx-coroutines = "1.10.2"
+kotlinxcoroutines = "1.8.1"
 room = "2.8.4"
 sqlite = "2.6.2"
 ksp = "2.3.2"
@@ -51,7 +51,7 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMul
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxcoroutines" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }

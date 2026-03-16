@@ -54,7 +54,7 @@ class MyMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
-        
+
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val channelName = "FireBase"
 

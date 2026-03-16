@@ -11,6 +11,7 @@ import com.example.kmpdemo.core.domain.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -60,8 +61,11 @@ class BookListViewModelTest {
 }
 
 class FakeBookRepository : BookRepository {
+    var searchBooksResult: Result<List<Book>, DataError.Remote> = Result.Success(emptyList())
+
+
     override suspend fun searchBooks(query: String): Result<List<Book>, DataError.Remote> {
-        return Result.Success(emptyList())
+        return searchBooksResult
     }
 
     override suspend fun getBookDescription(bookId: String): Result<String?, DataError> {
