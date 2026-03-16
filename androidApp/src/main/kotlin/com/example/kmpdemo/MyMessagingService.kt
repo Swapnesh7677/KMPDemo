@@ -24,11 +24,10 @@ class MyMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        //notification
+
         message.notification?.let {
             showNotification(message)
         }
-
 
         if(message.data.isNotEmpty()){
             showNotification(message)
@@ -46,7 +45,6 @@ class MyMessagingService : FirebaseMessagingService() {
             intent,
             PendingIntent.FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
         )
-
         val channelId = "Default"
 
         val notification = NotificationCompat.Builder(this, channelId)
@@ -56,8 +54,7 @@ class MyMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
-
-
+        
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val channelName = "FireBase"
 
